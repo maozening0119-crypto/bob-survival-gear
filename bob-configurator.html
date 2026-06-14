@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<link rel="manifest" href="manifest.json"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>BOB æœ«æ—¥æ±‚ç”Ÿè£…å¤‡é…ç½®å™¨</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Microsoft YaHei",sans-serif;background:#1a1a1a;color:#ccc;min-height:100vh}
+.header{background:linear-gradient(135deg,#1a1a1a 0%,#2d1f0e 50%,#1a1a1a 100%);border-bottom:2px solid #8b5e3c;padding:20px;text-align:center}
+.header h1{color:#c9954a;font-size:28px;letter-spacing:3px;margin-bottom:4px}
+.header .sub{color:#6b5530;font-size:12px;letter-spacing:2px}
+.layout{display:flex;max-width:1200px;margin:0 auto;min-height:calc(100vh - 80px)}
+.sidebar{width:360px;background:#1e1e1e;padding:24px 20px;border-right:1px solid #2a2a2a;overflow-y:auto}
+.main{flex:1;padding:24px;overflow-y:auto;background:#1a1a1a}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;color:#8b7355;font-size:12px;letter-spacing:1px;margin-bottom:6px}
+.form-group select,.form-group input{width:100%;padding:10px 12px;background:#252525;border:1px solid #3a3a3a;border-radius:6px;color:#ccc;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+.form-group select:focus,.form-group input:focus{border-color:#8b5e3c}
+.bo-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bo-type-btn{padding:10px 8px;background:#252525;border:1px solid #3a3a3a;border-radius:6px;color:#888;font-size:12px;cursor:pointer;text-align:center;transition:all .2s;font-family:inherit}
+.bo-type-btn:hover{border-color:#5a5a5a;color:#aaa}
+.bo-type-btn.active{background:#2d1f0e;border-color:#8b5e3c;color:#c9954a;font-weight:600}
+.btn-generate{width:100%;padding:14px;background:linear-gradient(135deg,#8b5e3c,#5c3d1e);color:#ffd699;border:1px solid #a0724a;border-radius:8px;font-size:16px;font-weight:700;letter-spacing:3px;cursor:pointer;transition:all .2s;font-family:inherit;margin-top:8px}
+.btn-generate:hover{background:linear-gradient(135deg,#a0724a,#6b4420);transform:translateY(-1px)}
+.btn-generate:active{transform:scale(.97)}
+.btn-manage{width:100%;padding:10px;background:transparent;border:1px solid #4a4a4a;color:#888;border-radius:8px;cursor:pointer;font-size:13px;letter-spacing:2px;font-family:inherit;transition:all .2s;margin-top:8px}
+.btn-manage:hover{border-color:#666;color:#aaa}
+.result-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #2a2a2a}
+.result-header h2{color:#c9954a;font-size:20px;letter-spacing:2px}
+.result-meta{display:flex;gap:20px;color:#666;font-size:13px}
+.result-meta span{color:#aaa;font-weight:600}
+.cat-section{margin-bottom:20px}
+.cat-header{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #252525;margin-bottom:10px}
+.cat-title{color:#8b7355;font-size:14px;font-weight:600;letter-spacing:1px}
+.cat-count{color:#555;font-size:11px;margin-left:auto}
+.gear-item{display:flex;align-items:center;gap:12px;padding:10px 12px;background:#1e1e1e;border-radius:8px;margin-bottom:6px;border:1px solid #252525}
+.gear-priority{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.gear-priority.essential{background:#e74c3c}
+.gear-priority.recommended{background:#f39c12}
+.gear-priority.optional{background:#555}
+.gear-name{flex:1;font-size:13px;color:#ccc}
+.gear-brand{color:#8b7355;font-size:10px}
+.gear-spec{color:#666;font-size:11px}
+.gear-price{color:#c9954a;font-size:13px;font-weight:600;min-width:70px;text-align:right}
+.gear-weight{color:#555;font-size:11px;min-width:60px;text-align:right}
+.placehold{text-align:center;padding:60px 20px;color:#444}
+.placehold .icon{font-size:48px;margin-bottom:16px}
+.placehold p{font-size:14px;letter-spacing:2px}
+.legal-note{margin-top:20px;padding:14px;background:#251a0a;border:1px solid #4a3520;border-radius:8px;color:#8b7355;font-size:11px;line-height:1.6}
+.legal-note strong{color:#c9954a}
+.btn-export{background:transparent;border:1px solid #4a4a4a;color:#777;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;font-family:inherit;letter-spacing:1px;margin-left:12px}
+.btn-export:hover{color:#aaa;border-color:#666}
+</style>
+</head>
+<body>
+<div class="header"><h1>BOB æœ«æ—¥æ±‚ç”Ÿé…ç½®å™¨</h1><div class="sub">Bug-Out Bag ä¸€é”®ç”Ÿæˆç”Ÿå­˜è£…å¤‡æ¸…å•</div></div>
+<div class="layout">
+<div class="sidebar">
+  <div class="form-group"><label>æ‰€åœ¨åœ°åŒºæ°”å€™</label><select id="region">
+    <option value="temperate">æ¸©å¸¦ï¼ˆä¸­å›½åŒ—æ–¹/æ¬§æ´²ï¼‰</option>
+    <option value="tropical">çƒ­å¸¦/äºšçƒ­å¸¦</option>
+    <option value="desert">æ²™æ¼ /å¹²æ—±</option>
+    <option value="arctic">å¯’å¸¦/æžåœ°</option>
+    <option value="mountain">å±±åœ°/é«˜åŽŸ</option>
+    <option value="coastal">æ²¿æµ·/æµ·å²›</option>
+    <option value="urban">åŸŽå¸‚çŽ¯å¢ƒ</option></select></div>
+  <div class="form-group"><label>æ‰€åœ¨å›½å®¶</label><select id="country">
+    <option value="CN">ä¸­å›½ (CNY)</option><option value="US">ç¾Žå›½ (USD)</option>
+    <option value="JP">æ—¥æœ¬ (JPY)</option><option value="GB">è‹±å›½ (GBP)</option>
+    <option value="EU">æ¬§ç›Ÿ (EUR)</option><option value="AU">æ¾³å¤§åˆ©äºš (AUD)</option>
+    <option value="CA">åŠ æ‹¿å¤§ (CAD)</option><option value="RU">ä¿„ç½—æ–¯ (RUB)</option>
+    <option value="BR">å·´è¥¿ (BRL)</option><option value="SEA">ä¸œå—äºš (USD)</option></select></div>
+  <div class="form-group"><label>å¹´é¾„èŒƒå›´</label><select id="age">
+    <option value="18-25">18-25 å²</option><option value="26-35" selected>26-35 å²</option>
+    <option value="36-45">36-45 å²</option><option value="46-55">46-55 å²</option>
+    <option value="55+">55 å²ä»¥ä¸Š</option></select></div>
+  <div class="form-group"><label>èº«ä½“çŠ¶å†µ</label><select id="physical">
+    <option value="excellent">ä¼˜ç§€</option><option value="good" selected>è‰¯å¥½</option>
+    <option value="average">ä¸€èˆ¬</option><option value="limited">æœ‰é™</option></select></div>
+  <div class="form-group"><label>BOB ç±»åž‹</label><div class="bo-type-grid" id="boTypeGrid">
+    <button class="bo-type-btn active" data-type="balanced">å‡è¡¡å…¨èƒ½</button>
+    <button class="bo-type-btn" data-type="medical">é‡åŒ»ç–—æ€¥æ•‘</button>
+    <button class="bo-type-btn" data-type="defense">é‡é˜²å¾¡è‡ªå«</button>
+    <button class="bo-type-btn" data-type="lightweight">è½»é‡æžç®€</button>
+    <button class="bo-type-btn" data-type="food">é‡é£Ÿç‰©æ°´æº</button>
+    <button class="bo-type-btn" data-type="tech">é‡é€šè®¯ç§‘æŠ€</button></div></div>
+  <div class="form-group"><label>é¢„ç®—</label><select id="budgetPreset" onchange="onBudgetChange()"><option value="500">å…¥é—¨çº§ (500)</option><option value="1000" selected>æ ‡å‡†çº§ (1,000)</option><option value="2000">è¿›é˜¶ (2,000)</option><option value="3000">è¿›é˜¶çº§+ (3,000)</option><option value="5000">ä¸“ä¸šçº§ (5,000)</option><option value="7500">ä¸“ä¸šçº§+ (7,500)</option><option value="10000">é¡¶çº§ (10,000)</option><option value="20000">éª¨ç°çº§ (20,000)</option><option value="999999">ä¸è®¾ä¸Šé™</option><option value="custom">è‡ªå®šä¹‰...</option></select><input type="number" id="budget" value="1000" min="100" step="100" placeholder="è¾“å…¥è‡ªå®šä¹‰é‡‘é¢" style="display:none;margin-top:6px"></div>
+  <button class="btn-generate" id="generateBtn">ä¸€ é”® ç”Ÿ æˆ é… ç½®</button>
+  <button class="btn-manage" onclick="window.open('gear-manager.html','_blank')">ç®¡ ç† è£… å¤‡ åº“</button>
+</div>
+<div class="main" id="resultArea">
+  <div class="placehold" id="placeholder"><div class="icon">&#127890;</div><p>é…ç½®ä½ çš„ç”Ÿå­˜è£…å¤‡</p><p style="font-size:11px;margin-top:8px;color:#3a3a3a">å·¦ä¾§å¡«å†™ä¿¡æ¯åŽç‚¹å‡»ç”Ÿæˆ</p></div>
+</div>
+</div>
+
+<script>
+(function(){
+var currencySymbols={CN:'Â¥',US:'$',JP:'Â¥',GB:'Â£',EU:'â‚¬',AU:'A$',CA:'C$',RU:'â‚½',BR:'R$',SEA:'$'};
+var currencyRates={CN:7.2,US:1,JP:150,GB:0.79,EU:0.92,AU:1.55,CA:1.38,RU:90,BR:5.1,SEA:1};
+var boType='balanced';
+
+document.querySelectorAll('.bo-type-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.bo-type-btn').forEach(function(b){b.classList.remove('active')});
+    this.classList.add('active');boType=this.dataset.type;
+  });
+});
+
+var gearDB=JSON.parse(localStorage.getItem('bob_geardb')||'null');
+if(!gearDB||!gearDB.length)gearDB=[{id:1,name:'æˆ·å¤–ç”Ÿå­˜ç›´åˆ€',brand:'Morakniv',model:'Garberg',spec:'å…¨é¾™éª¨/é«˜ç¢³é’¢/4.3å¯¸',cat:'tools',price:35,weight:350,priority:'essential',tags:['balanced','defense'],restrict:[]},{id:2,name:'å¤šåŠŸèƒ½å·¥å…·é’³',brand:'Leatherman',model:'Wave+',spec:'18åˆ1/å•æ‰‹å¼€',cat:'tools',price:50,weight:240,priority:'essential',tags:['balanced','tech','lightweight'],restrict:[]},{id:3,name:'æŠ˜å é”¯',brand:'Silky',model:'Gomboy 240',spec:'240mm/å¼§å½¢é½¿',cat:'tools',price:25,weight:280,priority:'recommended',tags:['balanced','food'],restrict:[]},{id:4,name:'ä¼žç»³ 30ç±³',brand:'SurvivorCord',model:'Tactical',spec:'550ç£…/7èŠ¯',cat:'tools',price:8,weight:200,priority:'essential',tags:['balanced','defense'],restrict:[]},{id:5,name:'å¤§åŠ›èƒ¶å¸¦',brand:'Gorilla',model:'Tough & Wide',spec:'åŒé‡åŽšåº¦/è€å€™',cat:'tools',price:6,weight:100,priority:'recommended',tags:['balanced','medical'],restrict:[]},{id:6,name:'å·¥å…µé“²',brand:'Cold Steel',model:'SF Shovel',spec:'æŠ˜å /å¤šç”¨é€”',cat:'tools',price:30,weight:900,priority:'optional',tags:['defense','food'],restrict:[]},{id:8,name:'ç£¨åˆ€çŸ³',brand:'Fallkniven',model:'DC4',spec:'é’»çŸ³+é™¶ç“·åŒé¢',cat:'tools',price:10,weight:80,priority:'recommended',tags:['balanced','defense'],restrict:[]},{id:10,name:'ä¾¿æºå‡€æ°´å™¨',brand:'Sawyer',model:'Squeeze',spec:'0.1å¾®ç±³/10ä¸‡åŠ ä»‘',cat:'water',price:30,weight:80,priority:'essential',tags:[],restrict:[]},{id:11,name:'å‡€æ°´è¯ç‰‡',brand:'Aquamira',model:'Tablets',spec:'50ç‰‡/äºŒæ°§åŒ–æ°¯',cat:'water',price:8,weight:30,priority:'essential',tags:[],restrict:[]},{id:12,name:'æŠ˜å æ°´è¢‹ 2L',brand:'Platypus',model:'Platy 2L',spec:'ä¸å«BPA/å¯å†·å†»',cat:'water',price:15,weight:40,priority:'essential',tags:['lightweight'],restrict:[]},{id:13,name:'ä¸é”ˆé’¢æ°´å£¶ 1L',brand:'Klean Kanteen',model:'Classic',spec:'å•å±‚/å¯ç›´ç«',cat:'water',price:20,weight:300,priority:'recommended',tags:['balanced','food'],restrict:[]},{id:20,name:'åŽ‹ç¼©é¥¼å¹² x10',brand:'Datrex',model:'3600 Bar',spec:'3600å¤§å¡/5å¹´ä¿è´¨',cat:'food',price:15,weight:720,priority:'essential',tags:[],restrict:[]},{id:21,name:'è‡ªçƒ­å†›ç²® x6',brand:'Mountain House',model:'Adventure',spec:'å†»å¹²/30å¹´ä¿è´¨',cat:'food',price:40,weight:900,priority:'recommended',tags:['balanced','food'],restrict:[]},{id:22,name:'ä¾¿æºç‚‰å¤´+æ°”ç½',brand:'MSR',model:'PocketRocket 2',spec:'73g/8200BTU',cat:'food',price:45,weight:450,priority:'recommended',tags:['balanced','food'],restrict:[]},{id:23,name:'æŠ˜å é’›ç¢—/é”…',brand:'Toaks',model:'Titanium Set',spec:'750+450ml/é’›åˆé‡‘',cat:'food',price:30,weight:180,priority:'recommended',tags:['lightweight','food'],restrict:[]},{id:27,name:'å£æœè¡¥æ¶²ç› x10',brand:'DripDrop',model:'ORS',spec:'WHOé…æ–¹',cat:'food',price:10,weight:100,priority:'recommended',tags:['balanced','medical'],restrict:[]},{id:30,name:'é˜²æ°´å¤©å¹•/é›¨æŠ«',brand:'DD Hammocks',model:'DD Tarp 3x3',spec:'3x3m/19æŒ‚ç‚¹',cat:'shelter',price:25,weight:400,priority:'essential',tags:[],restrict:[]},{id:31,name:'åº”æ€¥ç¡è¢‹/æ•‘ç”Ÿæ¯¯',brand:'SOL',model:'Escape Bivvy',spec:'åå°„90%ä½“æ¸©',cat:'shelter',price:20,weight:240,priority:'essential',tags:['lightweight'],restrict:[]},{id:40,name:'æ‰“ç«æ£’',brand:'Light My Fire',model:'Army 2.0',spec:'é•åˆé‡‘/3000â„ƒ',cat:'fire',price:8,weight:40,priority:'essential',tags:[],restrict:[]},{id:41,name:'é˜²æ°´ç«æŸ´ x2ç›’',brand:'UCO',model:'Stormproof',spec:'é˜²é£Žé˜²æ°´/15ç§’',cat:'fire',price:6,weight:50,priority:'essential',tags:[],restrict:[]},{id:42,name:'æ‰“ç«æœº x3',brand:'BIC',model:'Classic',spec:'å¯é /è½»é‡',cat:'fire',price:3,weight:60,priority:'essential',tags:['lightweight'],restrict:[]},{id:50,name:'IFAKæ€¥æ•‘åŒ…',brand:'NAR',model:'IFAK Gen7',spec:'å†›è§„/åŸºç¡€',cat:'medical',price:50,weight:500,priority:'essential',tags:[],restrict:[]},{id:51,name:'CATæ­¢è¡€å¸¦ x2',brand:'NAR',model:'CAT Gen7',spec:'å†›ç”¨è®¤è¯',cat:'medical',price:30,weight:120,priority:'essential',tags:['medical','defense'],restrict:[]},{id:52,name:'ä»¥è‰²åˆ—ç»·å¸¦ x2',brand:'First Care',model:'Emergency Bandage',spec:'åŠ åŽ‹æ­¢è¡€',cat:'medical',price:16,weight:120,priority:'essential',tags:['medical','defense'],restrict:[]},{id:56,name:'æ€¥æ•‘è¯å“åŒ…',brand:'Adventure Medical',model:'Meds Kit',spec:'æ­¢ç—›/æ­¢æ³»/æŠ—è¿‡æ•',cat:'medical',price:30,weight:100,priority:'essential',tags:['medical'],restrict:[]},{id:70,name:'æŒ‡åŒ—é’ˆ',brand:'Suunto',model:'MC-2',spec:'å…¨çƒå¹³è¡¡/å¯è°ƒç£åè§’',cat:'nav',price:20,weight:50,priority:'essential',tags:[],restrict:[]},{id:74,name:'æ±‚ç”Ÿå“¨',brand:'Fox 40',model:'Sonik Blast',spec:'115åˆ†è´',cat:'nav',price:5,weight:10,priority:'essential',tags:['lightweight'],restrict:[]},{id:80,name:'æ‰‹ç”µç­’',brand:'Fenix',model:'PD36R',spec:'1600æµæ˜Ž/USB-C',cat:'light',price:40,weight:130,priority:'essential',tags:[],restrict:[]},{id:81,name:'å¤´ç¯',brand:'Petzl',model:'Actik Core',spec:'450æµæ˜Ž/å¯å……ç”µ',cat:'light',price:30,weight:80,priority:'essential',tags:['lightweight','tech'],restrict:[]},{id:90,name:'å¯¹è®²æœº x2',brand:'å®é”‹',model:'UV-5R',spec:'5W/VHF+UHF',cat:'comm',price:25,weight:400,priority:'recommended',tags:['tech','defense'],restrict:['CN-']},{id:93,name:'å……ç”µå® 20000mAh',brand:'Anker',model:'PowerCore',spec:'20000mAh/åŒUSB',cat:'comm',price:30,weight:350,priority:'essential',tags:['tech'],restrict:[]},{id:94,name:'å¤ªé˜³èƒ½æŠ˜å æ¿',brand:'BigBlue',model:'28W',spec:'28W/åŒUSB',cat:'comm',price:60,weight:550,priority:'optional',tags:['tech'],restrict:[]},{id:100,name:'é˜²æš´å–·é›¾',brand:'Sabre Red',model:'Crossfire',spec:'è¾£æ¤’ç´ /4ç±³',cat:'defense',price:15,weight:40,priority:'recommended',tags:['defense','lightweight'],restrict:['CN','JP','GB','EU']},{id:101,name:'æˆ˜æœ¯æ‰‹ç”µ(æ”»å‡»å¤´)',brand:'SureFire',model:'EDC2-DFT',spec:'1200æµæ˜Ž',cat:'defense',price:60,weight:160,priority:'optional',tags:['defense'],restrict:[]},{id:110,name:'å†²é”‹è¡£',brand:"Arc'teryx",model:'Beta AR',spec:'Gore-Tex Pro',cat:'clothing',price:150,weight:460,priority:'recommended',tags:['balanced'],restrict:['tropical','desert']},{id:113,name:'å¤‡ç”¨è¢œå­ x3åŒ',brand:'Darn Tough',model:'Hiker',spec:'ç¾Žåˆ©å¥´ç¾Šæ¯›',cat:'clothing',price:25,weight:150,priority:'essential',tags:['lightweight'],restrict:[]},{id:114,name:'é˜²æ°´ç™»å±±é´',brand:'Salomon',model:'Quest 4 GTX',spec:'Gore-Tex/Contagrip',cat:'clothing',price:120,weight:900,priority:'essential',tags:[],restrict:[]},{id:140,name:'BOBèƒŒåŒ… 40-50L',brand:'Mystery Ranch',model:'2 Day Assault',spec:'27L/500D Cordura',cat:'pack',price:180,weight:1800,priority:'essential',tags:[],restrict:[]},{id:142,name:'é˜²æ°´è¢‹ x3',brand:'Sea to Summit',model:'Ultra-Sil',spec:'è¶…è½»ç¡…åŒ–',cat:'pack',price:20,weight:120,priority:'essential',tags:[],restrict:[]},{id:201,name:'ç”Ÿå­˜ç›´åˆ€',brand:'ä¸‰åˆƒæœ¨',model:'9008',spec:'å…¨é¾™éª¨/8Cr13MoV/å›½äº§å…¥é—¨',cat:'tools',price:12,weight:200,priority:'recommended',tags:['balanced','defense'],restrict:[]},{id:202,name:'å¤šåŠŸèƒ½å·¥å…·é’³',brand:'çº³æ‹“',model:'æˆ˜èˆ°Pro',spec:'18åˆ1/å°ç±³ç”Ÿæ€é“¾',cat:'tools',price:22,weight:260,priority:'recommended',tags:['balanced','tech','lightweight'],restrict:[]},{id:203,name:'æŠ˜å é”¯',brand:'è¿ªå¡ä¾¬',model:'MH500',spec:'180mm/å¼§å½¢é½¿/å…¥é—¨çº§',cat:'tools',price:5,weight:220,priority:'recommended',tags:['balanced','food'],restrict:[]},{id:204,name:'å·¥å…µé“²',brand:'æ˜Œæž—',model:'205',spec:'æŠ˜å /é«˜ç¢³é’¢/ç»å…¸æ¬¾',cat:'tools',price:5,weight:800,priority:'optional',tags:['defense','food'],restrict:[]},{id:205,name:'è¥åœ°æ–§',brand:'è¿ªå¡ä¾¬',model:'MH500',spec:'çŽ»ç’ƒçº¤ç»´æŸ„/1.2kg',cat:'tools',price:8,weight:1100,priority:'optional',tags:['balanced'],restrict:[]},{id:206,name:'æˆ˜æœ¯æ‰‹ç”µ',brand:'å‚²é›·',model:'Seeker 4',spec:'3200æµæ˜Ž/USB-C/EDCçƒ­é—¨',cat:'light',price:35,weight:180,priority:'recommended',tags:['balanced','defense'],restrict:[]},{id:207,name:'å¤´ç¯',brand:'å¥ˆç‰¹ç§‘å°”',model:'NU25 UL',spec:'400æµæ˜Ž/45g/USB-C',cat:'light',price:22,weight:45,priority:'recommended',tags:['lightweight','tech'],restrict:[]},{id:208,name:'è¥åœ°ç¯',brand:'å°ç±³',model:'ç±³å®¶è¥åœ°ç¯',spec:'LED/ç£å¸/å¯å……ç”µ',cat:'light',price:6,weight:120,priority:'optional',tags:['balanced'],restrict:[]},{id:209,name:'EDCä¾¿æºç¯',brand:'å¥ˆç‰¹ç§‘å°”',model:'Tiki',spec:'300æµæ˜Ž/12g/é’¥åŒ™æ‰£',cat:'light',price:10,weight:12,priority:'optional',tags:['lightweight','tech'],restrict:[]},{id:210,name:'æˆ˜æœ¯èƒŒåŒ…',brand:'è‡ªç”±å…µ',model:'æˆ˜æœ¯èƒŒåŒ…40L',spec:'molleç³»ç»Ÿ/40L/å†›è§„',cat:'pack',price:30,weight:1600,priority:'recommended',tags:['balanced','defense'],restrict:[]},{id:211,name:'ç™»å±±åŒ…',brand:'å¼ºæ°§',model:'å·¡æ¸¸50L',spec:'50L/è½»é‡/å›½äº§å“ç‰Œ',cat:'pack',price:25,weight:1400,priority:'recommended',tags:['balanced','lightweight'],restrict:[]},{id:212,name:'åˆ†ä½“ç‚‰å¤´',brand:'ç«æž«',model:'ç£çŸ³',spec:'3000W/ç”µå­æ‰“ç«/å›½äº§ç»å…¸',cat:'food',price:12,weight:300,priority:'recommended',tags:['balanced','food'],restrict:[]},{id:213,name:'è¶…è½»ç‚‰å¤´',brand:'BRS',model:'3000T',spec:'25g/é’›åˆé‡‘/æžè½»',cat:'food',price:5,weight:25,priority:'recommended',tags:['lightweight','food'],restrict:[]},{id:214,name:'é’›é”…å¥—è£…',brand:'æ­¥æž—',model:'T01',spec:'750+450ml/é’›åˆé‡‘',cat:'food',price:8,weight:150,priority:'recommended',tags:['lightweight','food'],restrict:[]},{id:215,name:'é’›å‰å‹º',brand:'æŒªå®¢',model:'é’›åˆé‡‘',spec:'é’›/äºŒåˆä¸€/16g',cat:'food',price:3,weight:16,priority:'recommended',tags:['lightweight','food'],restrict:[]},{id:216,name:'ä¸é”ˆé’¢æ°´å£¶',brand:'å¯Œå…‰',model:'1L',spec:'å•å±‚/å¯ç›´ç«/å›½è´§ç»å…¸',cat:'water',price:4,weight:280,priority:'recommended',tags:['balanced','food'],restrict:[]},{id:217,name:'æˆ·å¤–å‡€æ°´å™¨',brand:'è¿ªå¡ä¾¬',model:'MH100',spec:'0.1å¾®ç±³/500Lå¯¿å‘½',cat:'water',price:12,weight:100,priority:'recommended',tags:['lightweight'],restrict:[]},{id:218,name:'å‡€æ°´æ³¡è…¾ç‰‡x50',brand:'è“å¸†',model:'äºŒæ°§åŒ–æ°¯',spec:'50ç‰‡/30åˆ†é’Ÿ',cat:'water',price:1,weight:25,priority:'essential',tags:['lightweight'],restrict:[]},{id:219,name:'å¯¹è®²æœº',brand:'æ£®æµ·å…‹æ–¯',model:'8800',spec:'5W/åŒé¢‘/å½©å±',cat:'comm',price:22,weight:350,priority:'recommended',tags:['tech','defense'],restrict:[]},{id:220,name:'å……ç”µå®',brand:'å°ç±³',model:'20000mAh',spec:'20000mAh/å¿«å……/åŒUSB',cat:'comm',price:12,weight:360,priority:'essential',tags:['tech'],restrict:[]},{id:221,name:'æŠ˜å å¤ªé˜³èƒ½æ¿',brand:'ç»¿è”',model:'28W',spec:'28W/åŒUSB/ä¾¿æº',cat:'comm',price:8,weight:450,priority:'optional',tags:['tech'],restrict:[]},{id:222,name:'å†²é”‹è¡£',brand:'å‡¯ä¹çŸ³',model:'Mont-X',spec:'Gore-Tex/å›½äº§æ——èˆ°',cat:'clothing',price:75,weight:440,priority:'recommended',tags:['balanced'],restrict:['tropical','desert']},{id:223,name:'ç™»å±±éž‹',brand:'æŽ¢è·¯è€…',model:'é˜²æ°´æ¬¾',spec:'é˜²æ°´/é˜²æ»‘/é€æ°”',cat:'clothing',price:30,weight:850,priority:'recommended',tags:['balanced'],restrict:[]},{id:224,name:'é€Ÿå¹²Tæ¤',brand:'è¿ªå¡ä¾¬',model:'MH100',spec:'é€Ÿå¹²/UPF40/å…¥é—¨çº§',cat:'clothing',price:6,weight:150,priority:'recommended',tags:['lightweight'],restrict:[]},{id:225,name:'æˆ˜æœ¯æ‰‹å¥—',brand:'è‡ªç”±å…µ',model:'é˜²æŠ¤æ¬¾',spec:'é˜²å‰²/é˜²æ»‘/å¯è§¦å±',cat:'clothing',price:5,weight:100,priority:'recommended',tags:['balanced','defense'],restrict:[]},{id:226,name:'æ€¥æ•‘åŒ…',brand:'è“å¸†',model:'è½¦è½½æ€¥æ•‘åŒ…',spec:'60ä»¶å¥—/å®¶åº­çº§',cat:'medical',price:5,weight:400,priority:'recommended',tags:['medical'],restrict:[]},{id:227,name:'æ—‹åŽ‹æ­¢è¡€å¸¦x2',brand:'è“å¸†',model:'å†›ç”¨æ¬¾',spec:'æ—‹åŽ‹å¼/å•æ‰‹æ“ä½œ',cat:'medical',price:3,weight:60,priority:'essential',tags:['medical','defense'],restrict:[]},{id:228,name:'å¼¹æ€§ç»·å¸¦x5',brand:'æŒ¯å¾·',model:'å¼¹æ€§',spec:'7.5cm/5å·',cat:'medical',price:2,weight:100,priority:'recommended',tags:['medical'],restrict:[]},{id:229,name:'é˜²æ°´åˆ›å¯è´´x100',brand:'æµ·æ°æµ·è¯º',model:'é˜²æ°´åž‹',spec:'100ç‰‡/å¤šå°ºå¯¸/é˜²æ°´',cat:'medical',price:1,weight:40,priority:'essential',tags:['medical'],restrict:[]},{id:230,name:'æ€¥æ•‘å£è†œ',brand:'æµ·æ°æµ·è¯º',model:'CPRé¢ç½©',spec:'å•å‘é˜€/ä¾¿æº',cat:'medical',price:1,weight:15,priority:'recommended',tags:['medical'],restrict:[]},{id:231,name:'å¤©å¹•',brand:'ä¸‰å³°å‡º',model:'3F UL 3x3',spec:'3x3m/15Dç¡…èƒ¶/è¶…è½»',cat:'shelter',price:18,weight:280,priority:'recommended',tags:['lightweight'],restrict:[]},{id:232,name:'è½»é‡å¸ç¯·',brand:'æŒªå®¢',model:'äº‘å°š2',spec:'2äºº/1.8kg/è‡ªç«‹',cat:'shelter',price:40,weight:1800,priority:'optional',tags:['balanced'],restrict:['urban']},{id:233,name:'ç¡è¢‹',brand:'é»‘å†°',model:'B400',spec:'-5â„ƒ/400gå……ç»’',cat:'shelter',price:50,weight:700,priority:'optional',tags:['balanced'],restrict:['tropical','desert','urban']},{id:234,name:'å……æ°”ç¡åž«',brand:'æŒªå®¢',model:'å……æ°”æ¬¾',spec:'Rå€¼2.5/520g',cat:'shelter',price:15,weight:520,priority:'optional',tags:['balanced'],restrict:['tropical','urban']},{id:235,name:'é€Ÿå¹²æ¯›å·¾',brand:'è¿ªå¡ä¾¬',model:'MH100',spec:'è¶…ç»†çº¤ç»´/é€Ÿå¹²',cat:'hygiene',price:2,weight:45,priority:'recommended',tags:['lightweight'],restrict:[]},{id:236,name:'é©±èšŠæ¶²',brand:'äºšç¾Ž',model:'é©±èšŠæ¶²',spec:'10%é¿èšŠèƒº/100ml',cat:'hygiene',price:2,weight:100,priority:'recommended',tags:[],restrict:['arctic','desert']},{id:237,name:'æŠ˜å é•œ',brand:'è¿ªå¡ä¾¬',model:'ä¿¡å·é•œ',spec:'ä¸é”ˆé’¢/åŒé¢/ä¿¡å·',cat:'nav',price:2,weight:20,priority:'recommended',tags:['lightweight'],restrict:[]},{id:238,name:'è§å…‰æ£’x10',brand:'å›½äº§å“ç‰Œ',model:'é«˜äº®æ¬¾',spec:'12å°æ—¶/å¤šè‰²',cat:'light',price:2,weight:100,priority:'optional',tags:['balanced','defense'],restrict:[]},{id:239,name:'USBå¤‡ä»½ç›˜',brand:'é—ªè¿ª',model:'32GB',spec:'32GB/USB3.0/ä¾¿æº',cat:'docs',price:5,weight:5,priority:'recommended',tags:['tech'],restrict:[]}];
+
+var catNames={pack:'èƒŒåŒ…ç³»ç»Ÿ',tools:'å·¥å…·ä¸Žåˆ‡å‰²',water:'é¥®æ°´ä¸Žå‡€æ°´',food:'é£Ÿç‰©ä¸Žç‚Šå…·',shelter:'åº‡æŠ¤ä¸Žç¡çœ ',fire:'ç”Ÿç«',medical:'åŒ»ç–—æ€¥æ•‘',nav:'å¯¼èˆªä¸Žä¿¡å·',light:'ç…§æ˜Ž',comm:'é€šè®¯ä¸Žç”µåŠ›',defense:'é˜²å¾¡ä¸Žè‡ªå«',clothing:'è¡£ç‰©ä¸Žé˜²æŠ¤',hygiene:'å«ç”Ÿä¸Žæ¸…æ´',docs:'è¯ä»¶ä¸ŽçŽ°é‡‘'};
+var catOrder=['pack','tools','water','food','shelter','fire','medical','nav','light','comm','defense','clothing','hygiene','docs'];
+
+var regionGear={desert:[12,14,15,125],arctic:[34,44,83,110,111,117],tropical:[35,125,119,24,25],coastal:[35,119,24,25],mountain:[33,34,83,110,111,117],urban:[101,102]};
+var regionExclude={desert:[119,117,124,125,26],arctic:[119,124,125,26],tropical:[117,44,34],coastal:[44]};
+
+function getAgeFactor(age){if(age==='18-25')return 1.2;if(age==='26-35')return 1.0;if(age==='36-45')return 0.9;if(age==='46-55')return 0.7;return 0.5}
+function getPhysicalWeightLimit(phys){if(phys==='excellent')return 999999;if(phys==='good')return 18000;if(phys==='average')return 14000;return 10000}
+
+function onBudgetChange(){var v=document.getElementById('budgetPreset').value;if(v==='custom'){document.getElementById('budget').style.display='block';document.getElementById('budget').focus()}else{document.getElementById('budget').style.display='none';document.getElementById('budget').value=v}}
+function generate(){
+  var region=document.getElementById('region').value;
+  var country=document.getElementById('country').value;
+  var age=document.getElementById('age').value;
+  var phys=document.getElementById('physical').value;
+  var budget=parseFloat(document.getElementById('budget').value);
+  var budgetUSD=budget/(currencyRates[country]||1);
+  var weightLimit=getPhysicalWeightLimit(phys);
+  var actualWeightLimit=weightLimit*getAgeFactor(age);
+
+  var scored=[];
+  for(var i=0;i<gearDB.length;i++){
+    var g=gearDB[i];var score=0;
+    if(g.priority==='essential')score+=100;else if(g.priority==='recommended')score+=50;else score+=20;
+    if(g.tags.indexOf(boType)!==-1)score+=80;
+    if(regionGear[region]&&regionGear[region].indexOf(g.id)!==-1)score+=60;
+    if(regionExclude[region]&&regionExclude[region].indexOf(g.id)!==-1)score=-1;
+    if(g.restrict.indexOf(country)!==-1)score=-1;
+    if(boType==='lightweight'&&g.weight>500)score-=30;
+    if(boType==='lightweight'&&g.weight>200)score-=10;
+    if(score>=0){g._score=score;scored.push(g)}
+  }
+  scored.sort(function(a,b){return b._score-a._score});
+
+  var selected=[],totalPrice=0,totalWeight=0;
+  for(var i=0;i<scored.length;i++){
+    var g=scored[i];
+    if(g.price>budgetUSD*2)continue;
+    if(totalPrice+g.price>budgetUSD)continue;
+    if(totalWeight+g.weight>actualWeightLimit)continue;
+    selected.push(g);totalPrice+=g.price;totalWeight+=g.weight;
+  }
+
+  var localTotal=totalPrice*(currencyRates[country]||1);
+  var sym=currencySymbols[country]||'$';
+  var cats={};
+  for(var i=0;i<selected.length;i++){var g=selected[i];if(!cats[g.cat])cats[g.cat]=[];cats[g.cat].push(g)}
+
+  var resultArea=document.getElementById('resultArea');
+  var html='<div class="result-header"><h2>ä½ çš„ BOB è£…å¤‡æ¸…å•</h2><div class="result-meta"><div>æ€»ä»· <span>'+sym+localTotal.toFixed(0)+'</span></div><div>æ€»é‡ <span>'+(totalWeight/1000).toFixed(1)+'kg</span></div><div>ä»¶æ•° <span>'+selected.length+'</span></div><button class="btn-export" onclick="exportGearDB()">&#128203; å¯¼å‡ºæ•°æ®åº“</button></div></div>';
+
+  for(var ci=0;ci<catOrder.length;ci++){
+    var cat=catOrder[ci];if(!cats[cat]||cats[cat].length===0)continue;
+    html+='<div class="cat-section"><div class="cat-header"><span class="cat-title">'+catNames[cat]+'</span><span class="cat-count">'+cats[cat].length+'ä»¶</span></div>';
+    for(var j=0;j<cats[cat].length;j++){
+      var g=cats[cat][j];
+      var pClass=g.priority==='essential'?'essential':(g.priority==='recommended'?'recommended':'optional');
+      var gp=(g.price*(currencyRates[country]||1)).toFixed(0);
+      html+='<div class="gear-item"><span class="gear-priority '+pClass+'"></span><span class="gear-name">'+g.name;
+      if(g.brand)html+=' <span class="gear-brand">'+g.brand+' '+g.model+'</span>';
+      html+='</span><span class="gear-spec">'+g.spec+'</span><span class="gear-weight">'+(g.weight>999?(g.weight/1000).toFixed(1)+'kg':g.weight+'g')+'</span><span class="gear-price">'+sym+gp+'</span></div>';
+    }
+    html+='</div>';
+  }
+
+  var notes=[];
+  if(country==='CN')notes.push('ä¸­å›½å¤§é™†ç®¡åˆ¶ç‰©å“å·²è‡ªåŠ¨è¿‡æ»¤');
+  if(boType==='medical')notes.push('åŒ»ç–—åž‹é…ç½®ï¼šå¢žåŠ äº†æ­¢è¡€ã€è¯å“ç­‰æ€¥æ•‘ç‰©èµ„');
+  if(boType==='defense')notes.push('é˜²å¾¡åž‹é…ç½®ï¼šä¼˜å…ˆé˜²å«å·¥å…·ï¼ˆå·²æŒ‰æ‰€åœ¨å›½æ³•å¾‹è¿‡æ»¤ï¼‰');
+  if(boType==='lightweight')notes.push('è½»é‡åž‹é…ç½®ï¼šæ€»é‡æŽ§åˆ¶åœ¨åˆç†èŒƒå›´å†…');
+  if(region==='desert')notes.push('æ²™æ¼ çŽ¯å¢ƒï¼šå¼ºåŒ–æ°´æºé…ç½®');
+  if(region==='arctic')notes.push('æžå¯’çŽ¯å¢ƒï¼šå¢žåŠ ä¿æ¸©è£…å¤‡');
+  if(region==='tropical')notes.push('çƒ­å¸¦çŽ¯å¢ƒï¼šå¼ºåŒ–é˜²è™«é˜²æ½®');
+  if(budget<1000)notes.push('é¢„ç®—æœ‰é™ï¼Œä¼˜å…ˆä¿éšœæ ¸å¿ƒç”Ÿå­˜è£…å¤‡');
+
+  if(notes.length>0){html+='<div class="legal-note"><strong>&#9888; é…ç½®è¯´æ˜Ž</strong><br>';for(var n=0;n<notes.length;n++)html+='&bull; '+notes[n]+'<br>';html+='<br><strong>&#9432; å…è´£å£°æ˜Ž</strong>ï¼šæœ¬é…ç½®ä»…ä¸ºå‚è€ƒå»ºè®®ï¼Œè¯·éµå®ˆå½“åœ°æ³•å¾‹æ³•è§„ã€‚</div>'}
+  resultArea.innerHTML=html;
+}
+
+window.exportGearDB=function(){
+  var data={meta:{version:'1.0.0',name:'BOB Survival Gear Database',lastUpdated:new Date().toISOString().slice(0,10),license:'MIT'},categories:{},items:gearDB};
+  for(var i=0;i<catOrder.length;i++)data.categories[catOrder[i]]={name:catNames[catOrder[i]],order:i+1};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='gear-database.json';a.click();
+};
+
+document.getElementById('generateBtn').addEventListener('click',generate);
+document.addEventListener('keydown',function(e){if(e.ctrlKey&&e.key==='Enter')generate()});
+window.onBudgetChange=onBudgetChange;
+})();
+</script>
+</body>
+</html>
